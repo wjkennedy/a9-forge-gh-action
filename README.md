@@ -28,6 +28,76 @@ To complete this tutorial, you will need:
 
 You should also pin the Forge CLI major version in CI to reduce breaking changes. Example: set `forge-cli-version: "12"` to install the latest `12.x` release.
 
+## Recommended local setup: Atlassian Forge development container
+
+For repeatable onboarding, we recommend developing Forge apps inside Atlassian's official development container image. This keeps your local toolchain consistent across machines and matches the CI pattern used by this action.
+
+Key points:
+
+- The dev container image is `atlassian/forge-devcontainer:latest`.
+- Do not use `forge login` inside a development container.
+- Use environment variables for authentication: `FORGE_EMAIL` and `FORGE_API_TOKEN`.
+
+### Step A: Add a dev container configuration
+
+Create a file named `.devcontainer.json` at the root of your Forge app repository:
+
+```json
+{
+  "name": "Atlassian Forge Development Container Sample Config",
+  "image": "atlassian/forge-devcontainer:latest",
+  "features": {},
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+      ],
+      "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash"
+      }
+    }
+  },
+  "remoteUser": "node"
+}
+```
+
+Optional: pull the image ahead of time:
+
+```bash
+docker pull atlassian/forge-devcontainer:latest
+```
+
+### Step B: Open the repo in the container
+
+- VS Code: open the repo, then choose Reopen in Container when prompted.
+- IntelliJ IDEA: use the Dev Containers plugin and open the project in a container.
+
+### Step C: Configure Forge authentication in the container
+
+Set these environment variables in your shell configuration (or export them per session):
+
+- `FORGE_EMAIL`
+- `FORGE_API_TOKEN`
+
+Example:
+
+```bash
+export FORGE_EMAIL="you@example.com"
+export FORGE_API_TOKEN="your_api_token"
+```
+
+After that, you can run Forge CLI commands from the IDE terminal:
+
+```bash
+forge deploy
+forge install
+```
+
+Reference: Atlassian docs on running Forge CLI via a development container: `https://developer.atlassian.com/platform/forge/enterprise/use-forge-cli-via-a-development-container/`
+
+If you are behind a corporate proxy, that same doc includes Docker and dev container proxy configuration guidance.
+
 ## Step 1: Create secrets and variables
 
 Forge CLI authentication in CI uses these environment variables:
