@@ -1,0 +1,100 @@
+name: "A9 Forge CI"
+description: "Run Atlassian Forge CLI in CI: install Forge CLI, deploy, and optionally install your app to a site."
+author: "A9 Consulting Group"
+branding:
+  icon: "upload-cloud"
+  color: "blue"
+
+inputs:
+  forge-cli-version:
+    description: "Version of @forge/cli to install (example: 12.5.0, latest)."
+    required: false
+    default: "latest"
+  working-directory:
+    description: "Directory containing your Forge app (where manifest.yml lives)."
+    required: false
+    default: "."
+  pre-run:
+    description: "Optional multi-line commands to run before Forge (example: npm ci)."
+    required: false
+    default: ""
+  pre-run-shell:
+    description: "Shell to use for pre-run commands (bash or pwsh)."
+    required: false
+    default: "bash"
+  usage-analytics:
+    description: "Set Forge CLI usage analytics setting to true to avoid prompts in CI (true or false)."
+    required: false
+    default: "true"
+
+  environment:
+    description: "Forge environment (development, staging, production, or your custom env)."
+    required: false
+    default: "staging"
+
+  deploy:
+    description: "Run forge deploy (true or false)."
+    required: false
+    default: "true"
+  no-verify:
+    description: "Pass --no-verify to forge deploy (true or false)."
+    required: false
+    default: "false"
+  deploy-tag:
+    description: "Optional build tag to deploy (equivalent to forge deploy --tag <tag>)."
+    required: false
+    default: ""
+  deploy-major-version:
+    description: "Optional major version to update during deploy (equivalent to forge deploy --major-version <n>)."
+    required: false
+    default: ""
+  deploy-args:
+    description: "Additional arguments for forge deploy (string, supports quotes)."
+    required: false
+    default: ""
+
+  install:
+    description: "Run forge install after deploy (true or false)."
+    required: false
+    default: "false"
+  site:
+    description: "Atlassian site URL (example: example.atlassian.net). Required when install=true."
+    required: false
+    default: ""
+  product:
+    description: "Atlassian app to install into (jira, confluence, compass, bitbucket). Required when install=true."
+    required: false
+    default: ""
+  upgrade:
+    description: "Use --upgrade during install (true or false)."
+    required: false
+    default: "true"
+  confirm-scopes:
+    description: "Use --confirm-scopes during install (true or false)."
+    required: false
+    default: "true"
+  install-major-version:
+    description: "Optional major version to install (equivalent to forge install --major-version <n>)."
+    required: false
+    default: ""
+  install-args:
+    description: "Additional arguments for forge install (string, supports quotes)."
+    required: false
+    default: ""
+
+  run:
+    description: "Run an arbitrary Forge CLI command instead of deploy/install (example: 'lint' or 'variables list'). If set, deploy/install inputs are ignored."
+    required: false
+    default: ""
+
+outputs:
+  deployed:
+    description: "true if deploy ran successfully."
+  installed:
+    description: "true if install ran successfully."
+  forge_cli_version:
+    description: "The @forge/cli version string reported by 'forge --version'."
+
+runs:
+  using: "node20"
+  main: "dist/index.js"
