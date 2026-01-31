@@ -9,7 +9,7 @@ inputs:
   forge-cli-version:
     description: "Version of @forge/cli to install (example: 12.5.0, latest)."
     required: false
-    default: "latest"
+    default: "12"
   working-directory:
     description: "Directory containing your Forge app (where manifest.yml lives)."
     required: false
@@ -23,7 +23,7 @@ inputs:
     required: false
     default: "bash"
   usage-analytics:
-    description: "Set Forge CLI usage analytics setting to true to avoid prompts in CI (true or false)."
+    description: "Set Forge CLI usage analytics setting (true or false). This avoids prompts when using --non-interactive."
     required: false
     default: "true"
 

@@ -188,6 +188,12 @@ async function main() {
   // Basic auth guardrail: Forge supports env var auth for CI.
   const forgeEmail = String(process.env.FORGE_EMAIL ?? '').trim();
   const forgeToken = String(process.env.FORGE_API_TOKEN ?? '').trim();
+  // Mask secrets defensively (GitHub masks secrets, but this helps with derived values).
+  try {
+    if (forgeToken) console.log(`::add-mask::${forgeToken}`);
+    if (forgeEmail) console.log(`::add-mask::${forgeEmail}`);
+  } catch (_) {}
+
   if (!forgeEmail || !forgeToken) {
     throw new Error(
       'Missing FORGE_EMAIL and/or FORGE_API_TOKEN in environment. ' +
@@ -228,14 +234,12 @@ async function main() {
     writeSummary('\nCould not capture `forge --version` output.');
   }
 
-  // Avoid usage analytics prompt in CI if requested
-  if (usageAnalytics) {
-    try {
-      await runCommand('forge', ['settings', 'set', 'usage-analytics', 'true'], { cwd });
-    } catch (e) {
-      // Not fatal; keep going
-      writeSummary('\nNote: forge settings set usage-analytics true failed. Continuing.');
-    }
+  // Set usage analytics explicitly to avoid prompts when using --non-interactive
+  try {
+    await runCommand('forge', ['settings', 'set', 'usage-analytics', usageAnalytics ? 'true' : 'false'], { cwd });
+  } catch (e) {
+    // Not fatal; keep going
+    writeSummary(`\nNote: forge settings set usage-analytics ${usageAnalytics ? 'true' : 'false'} failed. Continuing.`);
   }
 
   let didDeploy = false;
@@ -244,6 +248,9 @@ async function main() {
   if (runOverride.trim().length > 0) {
     const args = parseArgString(runOverride);
     writeSummary(`\n### Run\nExecuting: \`forge ${args.join(' ')}\``);
+    // In run override mode, deploy/install outputs are not applicable.
+    writeOutput('deployed', 'false');
+    writeOutput('installed', 'false');
     await runCommand('forge', args, { cwd });
   } else {
     if (deploy) {

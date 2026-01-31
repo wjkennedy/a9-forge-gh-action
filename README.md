@@ -298,7 +298,7 @@ This action expects authentication via environment variables:
 
 ### Inputs
 
-- `forge-cli-version`: Version of `@forge/cli` to install. Example: `12` or `12.5.0`. Default: `latest`.
+- `forge-cli-version`: Version of `@forge/cli` to install. Recommended: pin a major version like `12`. Default: `12`.
 - `working-directory`: Directory where your Forge app lives. Default: `.`.
 - `pre-run`: Optional multi-line commands to run before Forge commands (example: `npm ci`).
 - `pre-run-shell`: Shell used for `pre-run` (`bash` or `pwsh`). Default: `bash`.
