@@ -30,7 +30,7 @@ inputs:
   environment:
     description: "Forge environment (development, staging, production, or your custom env)."
     required: false
-    default: "staging"
+    default: "development"
 
   deploy:
     description: "Run forge deploy (true or false)."
