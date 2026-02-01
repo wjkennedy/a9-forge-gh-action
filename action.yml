@@ -9,7 +9,7 @@ inputs:
   forge-cli-version:
     description: "Version of @forge/cli to install (example: 12.5.0, latest)."
     required: false
-    default: "12"
+    default: "latest"
   working-directory:
     description: "Directory containing your Forge app (where manifest.yml lives)."
     required: false
