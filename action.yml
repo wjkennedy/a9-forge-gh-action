@@ -17,7 +17,7 @@ inputs:
   pre-run:
     description: "Optional multi-line commands to run before Forge (example: npm ci)."
     required: false
-    default: ""
+    default: "npm ci"
   pre-run-shell:
     description: "Shell to use for pre-run commands (bash or pwsh)."
     required: false
